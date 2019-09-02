@@ -1,0 +1,184 @@
+@font-face {
+    font-family: 'sertig';
+    src: url('../font/Sertig.otf');
+}
+
+@font-face {
+    font-family: 'sans';
+    src: url('../font/OpenSans-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('../font/source-sans-pro/SourceSansPro-Light.otf');
+}
+
+@font-face {
+    font-family: 'source-sans-pro-bold';
+    src: url('../font/source-sans-pro/SourceSansPro-Bold.otf');
+}
+
+html,
+body {
+    font-family: 'source-sans-pro';
+    padding: 0;
+    margin: 0;
+}
+
+
+.breadcrumb {
+    font-size: 12px;
+}
+
+th {
+    font-size: 13px;
+}
+
+td {
+    font-size: 13px;
+}
+
+
+nav {
+    align-content: center;
+}
+
+nav.home {
+    width: 100px;
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.nav ul {
+    margin: auto;
+    margin-top: -10px;
+}
+
+.nav ul {
+    margin: auto;
+}
+
+.navbar .input-group {
+    margin: auto;
+    max-width: 400px;
+    margin-top: 5px;
+    margin-right: -1000px;
+}
+
+ul.nav-treeview {
+    margin-left: 5px;
+}
+
+#toggler {
+    color: black;
+}
+
+nav.home li.nav-item .nav-link {
+    border-radius: 10px;
+    color: white;
+    transition: 0.8s;
+}
+
+nav.home li.nav-item .nav-link:hover {
+    text-shadow: 0px 0px 5px cornflowerblue;
+    color: cornflowerblue;
+}
+
+nav.home li.nav-item .nav-link:active {
+    text-shadow: 0px 0px 10px red;
+}
+
+li a i {
+    margin-left: 3px;
+}
+
+
+
+
+
+
+
+
+
+.inputjumlah {
+    text-align: center;
+    width: 50px;
+    display: inline-block;
+    border-radius: 0;
+    box-shadow: 3px 3px 5px grey;
+}
+
+.tombolpesan {
+    margin-top: 40px;
+}
+
+.input-plus {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.input-min {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.judulsection {
+    width: 300px;
+}
+
+.colnya {
+    padding: 5px;
+}
+
+.pallete-product {
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border: 1px solid grey;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Kartu produk */
+
+
+
+
+/* Modal Produk */
+.modalprodukdialog {
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+}
+
+.modalprodukbody {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* Utility */
+.btn-danger {
+    background-color: red;
+}
+
+.sidebar-dark-primary {
+    background-color: #1a237e;
+}
+
+.tombolcarousel {
+    width: 5%;
+}
+
+/* baju */
+.baju {
+    background-color: rgba(240, 240, 240, 1);
+}
+
+/* tabelkeranjang */
+.tabelkeranjang {
+    padding-top: 140px;
+}
+
+.rekening {
+    background-color: rgba(255, 255, 255, 0.7);
+}
