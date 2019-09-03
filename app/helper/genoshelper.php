@@ -1,17 +1,20 @@
 <?php
 
-function formatRupiah($angka){
-    return "Rp ".number_format($angka,0,',','.');
+use App\Master\terminalModel;
+
+function formatRupiah($angka)
+{
+    return "Rp " . number_format($angka, 0, ',', '.');
 }
 
-function formatDate($tanggal){
-    return date("Y-m-d", strtotime($tanggal) );
-
+function formatDate($tanggal)
+{
+    return date("Y-m-d", strtotime($tanggal));
 }
 
-function formatDateToSurat($tanggal){
-    return date("d-M-Y", strtotime($tanggal) );
-
+function formatDateToSurat($tanggal)
+{
+    return date("d-M-Y", strtotime($tanggal));
 }
 
 function formatuang($angka)
@@ -26,10 +29,19 @@ function hargaafterdiskon($diskon, $hargajual)
     return 'Rp. ' . number_format($hasil, 0, ',', '.');
 }
 
+function getNamaTerminal($kd)
+{
+    $result = terminalModel::query()
+        ->join('tb_kota', 'tb_terminal.kdkota', '=', 'tb_kota.kdKota')
+        ->select('kdTerminal', 'namaTerminal', 'tb_terminal.kdkota', 'tb_kota.namaKota')
+        ->where('kdTerminal', '=', $kd)
+        ->get();
+    return $result[0]->namaTerminal . ' (' . $result[0]->namaKota . ' )';
+}
 function hargaongkir($tujuan)
 {
-    
-if ($tujuan == '') {
+
+    if ($tujuan == '') {
         # code...
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -58,13 +70,12 @@ if ($tujuan == '') {
             $data = json_decode($response, true);
             return $data['rajaongkir']['results'][0]['costs'][0]['cost'][0]['value'];
         }
-}else{
-    return 'gagal';
+    } else {
+        return 'gagal';
+    }
 }
-    
-    
-}
-function city(){
+function city()
+{
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => "http://api.rajaongkir.com/starter/city",
@@ -87,7 +98,7 @@ function city(){
     // echo "<label>Kota Asal</label><br>";
     // echo "<select name='asal' id='asal'>";
     // echo "<option>Pilih Kota Asal</option>";
-    
+
     $data = json_decode($response, true);
     // for ($i = 0; $i < count($data['rajaongkir']['results']); $i++) {
     //     echo "<option value='" . $data['rajaongkir']['results'][$i]['city_id'] . "'>" . $data['rajaongkir']['results'][$i]['city_name'] . "</option>";

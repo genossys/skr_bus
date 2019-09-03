@@ -23,19 +23,15 @@ $sekarang = date("Y-m-d");
     <p style="font-size: 20px" class="pt-3 pl-3">Cari dan pesan tiket bus, travel, shuttle disini!</p>
     <hr>
 
-    <form action="" method="GET">
+    <form action="/jadwal" method="GET">
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label><small> Keberangkatan</small></label>
-                    <select class="form-control select2" style="width: 100%;" id="" name="">
-                        <option selected="selected">Tirtonadi (Solo)</option>
-                        <option>Alaska</option>
-                        <option>California</option>
-                        <option>Delaware</option>
-                        <option>Tennessee</option>
-                        <option>Texas</option>
-                        <option>Washington</option>
+                    <select class="form-control select2" style="width: 100%;" id="asal" name="asal">
+                        @foreach ($terminal as $item)
+                            <option value="{{$item->kdTerminal}}">{{$item->namaTerminal}} ({{$item->namaKota}})</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -43,14 +39,10 @@ $sekarang = date("Y-m-d");
             <div class="col-md-3">
                 <div class="form-group">
                     <label><small>Tujuan</small></label>
-                    <select class="form-control select2" style="width: 100%;" id="" name="">
-                        <option selected="selected">Giwangan (Jogja)</option>
-                        <option>Alaska</option>
-                        <option>California</option>
-                        <option>Delaware</option>
-                        <option>Tennessee</option>
-                        <option>Texas</option>
-                        <option>Washington</option>
+                    <select class="form-control select2" style="width: 100%;" id="tujuan" name="tujuan">
+                        @foreach ($terminal as $item)
+                            <option value="{{$item->kdTerminal}}">{{$item->namaTerminal}} ({{$item->namaKota}})</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -59,7 +51,7 @@ $sekarang = date("Y-m-d");
                 <div class="form-group">
                     <label><small>Tanggal</small></label>
                     <div class="input-group">
-                        <input type="text" style="border: 1px solid #aaa" class="form-control datepicker pl-2" name="" id="" value="{{$sekarang}}" />
+                        <input type="text" style="border: 1px solid #aaa" class="form-control datepicker pl-2" name="tanggal" id="tanggal" value="{{$sekarang}}" />
                     </div>
                 </div>
             </div>

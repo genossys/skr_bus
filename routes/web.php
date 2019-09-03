@@ -11,13 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('umum.welcome');
-});
+Route::get('/', 'Member\homeController@index');
 
-Route::get('/jadwal', function () {
-    return view('umum.jadwal');
-});
+Route::get('/jadwal', 'Member\homeController@cariJadwal');
 
 Route::get('/pembayaran', function () {
     return view('umum.pembayaran');

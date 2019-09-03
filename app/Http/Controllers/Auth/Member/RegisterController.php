@@ -55,6 +55,7 @@ class RegisterController extends Controller
                 $member->email = $r->email;
                 $member->password = Hash::make($r->password);
                 $member->nohp = $r->nohp;
+                $member->alamat = NULL;
                 if ($member->save()) {
                     $credentials = $r->only('email', 'password');
                     if (Auth::guard('member')->attempt($credentials)) {

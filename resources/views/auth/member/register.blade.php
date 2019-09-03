@@ -15,12 +15,13 @@
 </head>
 <body>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="brand-register row text-center">
-                <div class="brand-img">
-                    <img class="img-fluid" src="{{ asset('/images/brandwhite.png') }}" alt="{{ asset('/images/brandwhite.png') }}" width="20%" height="10%">
+        <div class="brand-register text-center">
+                <div class="brand-img text-light">
+                    <h3>REGISTER MEMBER PO. LAJU PRIMA</h3>
                 </div>
-            </div>
+        </div>
+        <div class="row justify-content-center">
+            
             <div class="col-md-4 box-login">
                 <div class="title text-center">
                     Register Member

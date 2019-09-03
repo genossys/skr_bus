@@ -21,43 +21,49 @@ $sekarang = date("Y-m-d");
 <div style="padding-top: 370px"></div>
 <section class="container rounded mb-5" style="min-height: 200px">
     <div class="w-100">
-        <p style="font-size: 20px" class="d-inline-block">Tirtonadi (Solo) - Giwangan (Jogja)</p>
-        <button class="btn btn-info pull-right">Ubah Pencarian</button>
+
+        <p style="font-size: 20px" class="d-inline-block">Route</p><br>
+        <p style="font-size: 20px" class="d-inline-block">{{getNamaTerminal($asal)}} - {{getNamaTerminal($tujuan)}}</p>
+        <a href="/" class="btn btn-info pull-right">Ubah Pencarian</a>
     </div>
-    <a class="d-inline-block">Senin, 2 September 2019, 4 Kursi</a>
+    <a class="d-inline-block">Jadwal Bus Tanggal : {{$tanggal}}</a>
 
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
-                    <th>Jadwal</th>
+                    <th>#</th>
+                    <th>Jam</th>
                     <th>Keberangkatan</th>
                     <th>Tujuan</th>
                     <th>Harga</th>
                     <th>Action</th>
                 </tr>
             </thead>
-
             <tbody>
+                @if ($jadwal->count() > 0)
+                    
+                    @foreach ($jadwal as $item)
+                        <tr>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$item->jam}}</td>
+                            <td>{{getNamaTerminal($asal)}}</td>
+                            <td>{{getNamaTerminal($tujuan)}}</td>
+                            <td>{{$item->harga}}</td>
+                            <td style="width: 170px">
+                                <button class="btn btn-outline-success">Beli Sekarang</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                    
+                @else
                 <tr>
-                    <td>15:00</td>
-                    <td>Solo</td>
-                    <td>Jogja</td>
-                    <td>Rp. 230.000</td>
-                    <td style="width: 170px">
-                        <button class="btn btn-outline-success">Beli Sekarang</button>
+                    <td colspan="6">
+                        <h4 class="text-center"> Maaf, Jadwal Tidak Tersedia </h4>
                     </td>
                 </tr>
-
-                <tr>
-                    <td>17:00</td>
-                    <td>Solo</td>
-                    <td>Jogja</td>
-                    <td>Rp. 280.000</td>
-                    <td style="width: 170px">
-                        <button class="btn btn-outline-success">Beli Sekarang</button>
-                    </td>
-                </tr>
+                    
+                @endif
             </tbody>
         </table>
     </div>

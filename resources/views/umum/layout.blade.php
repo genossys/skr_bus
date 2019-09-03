@@ -34,31 +34,27 @@
         <div class="collapse navbar-collapse " id="navbarNav" style="100%">
             <ul class="navbar-nav ml-auto" style="margin-right: 20px; font-weight: 200; font-size: 14px">
                 <li class="nav-item ">
-                    <a class="nav-link" href="/formKredit">Beranda <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Beranda <span class="sr-only">(current)</span></a>
                 </li>
 
                 <li class="nav-item ">
-                    <a class="nav-link ml-3" href="/formDeposito">Cek Pesanan</a>
+                    <a class="nav-link ml-3" href="/cekpesanan">Cek Pesanan</a>
                 </li>
 
                 <li class="nav-item ">
-                    <a class="nav-link ml-3" href="/formDeposito">Konfirmasi Pembayaran</a>
+                    <a class="nav-link ml-3" href="/pembayaran">Konfirmasi Pembayaran</a>
                 </li>
 
-                @if (auth()->check())
-                @if (auth()->user()->hakAkses == 'admin' || auth()->user()->hakAkses == 'pimpinan')
-                <li class="nav-item mr-5 ml-3">
-                    <a class="nav-link" href="{{route('admin')}}">Dashboard</a>
-                </li>
-                @endif
+                @if (auth()->guard('member')->check())
+                
 
                 <li class="nav-item dropdown ml-auto">
                     <a class="nav-link" data-toggle="dropdown" href="#">
-                        {{auth()->user()->nama}}
+                        {{auth()->guard('member')->user()->username}}
                         <i class="fa fa-user"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                        <a href="{{route('historyTransaksiKreditur')}}" class="dropdown-item dropdown-footer">History Transaksi</a>
+                        <a href="/cekpesanan" class="dropdown-item dropdown-footer">History Transaksi</a>
                         <hr>
                         <a href="{{route('logout')}}" class="dropdown-item dropdown-footer">Logout</a>
                     </div>
@@ -105,7 +101,7 @@
                                 <i class="fa fa-envelope text-light mr-2" aria-hidden="true"></i>
                             </td>
                             <td>
-                                <p class="text-light"> danalestari@gmail.com</p>
+                                <p class="text-light"> lajuprima@gmail.com</p>
                             </td>
                         </tr>
 
@@ -128,6 +124,7 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="{{ asset('/js/app.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/js/jQuery/jquery-3.4.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/js/slick/slick.min.js') }}"></script>
     <script src="{{ asset('/js/genosstyle.js') }}"></script>
