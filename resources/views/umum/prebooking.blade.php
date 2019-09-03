@@ -7,21 +7,20 @@ $sekarang = date("Y-m-d");
 @endphp
 <div style="height: 50px"></div>
 <div style="height: 50px; background-color: #03298F; z-index: 20">
-    <p style="padding-top: 13px; color: white; font-size: 20px; margin-left: 100px">Solo - Jogja, Selasa 2 September 2019</p>
+<p style="padding-top: 13px; color: white; font-size: 20px; margin-left: 100px">{{getNamaTerminal($asal)}} - {{getNamaTerminal($tujuan)}}, {{$tanggal}}</p>
 </div>
 
 <section class="container">
     <div class="row mt-3">
         <div class="col-sm-3 pt-3 pl-5 rounded" style="background-color: white; border: 1px solid #ddd">
+            <h5>{{getNamaBus($kdBus)}}</h5>
             <h5>Kursi yang tersedia:</h5>
             <div class="pl-2 pt-3 pr-5 pb-3">
                 <div class="row">
-                    @for ($i = 1; $i <= 45; $i++) <div class="col-3 m-0 p-0">
-                        @if($i == 5 || $i == 10)
-                        <button class="rounded bg-danger h-100 w-100 text-white">{{$i}}</button>
-                        @else
+                    @for ($i = 1; $i <= $bus[0]->kursi; $i++) 
+                    <div class="col-3 m-0 p-0">
                         <button class="rounded bg-success h-100 w-100 text-white">{{$i}}</button>
-                        @endif </div>
+                    </div>
                 @endfor
             </div>
         </div>
@@ -34,20 +33,22 @@ $sekarang = date("Y-m-d");
                 <h5>Data Penumpang:</h5>
                 <p>Isi data penumpang dan kursi secara valid</p>
                 <form action="" method="post">
+                    @csrf
                     <div class="row">
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Nama Penumpang</label>
-                                <input type="text" class="form-control" placeholder="Nama Produk" id="txtIdProduk" name="txtIdProduk">
+                                <input type="text" class="form-control" placeholder="Nama Penumpang" id="penumpang" name="penumpang">
                             </div>
                         </div>
 
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Kursi</label>
-                                <select class="form-control" id="" name="">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
+                                <select class="form-control" id="kursi" name="kursi">
+                                    @for ($i = 1; $i <= $bus[0]->kursi; $i++)
+                                        <option value="{{$i}}">{{$i}}</option>
+                                    @endfor
                                 </select>
                             </div>
                         </div>

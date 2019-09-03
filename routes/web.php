@@ -14,6 +14,7 @@
 Route::get('/', 'Member\homeController@index');
 
 Route::get('/jadwal', 'Member\homeController@cariJadwal');
+Route::get('/prebooking', 'Member\homeController@prebooking');
 
 Route::get('/pembayaran', function () {
     return view('umum.pembayaran');
@@ -23,9 +24,7 @@ Route::get('/cekpesanan', function () {
     return view('umum.cekpesanan');
 });
 
-Route::get('/prebooking', function () {
-    return view('umum.prebooking');
-});
+
 
 Auth::routes();
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Master\busModel;
 use App\Master\terminalModel;
 
 function formatRupiah($angka)
@@ -38,6 +39,17 @@ function getNamaTerminal($kd)
         ->get();
     return $result[0]->namaTerminal . ' (' . $result[0]->namaKota . ' )';
 }
+
+function getNamaBus($kd)
+{
+    $result = busModel::query()
+        ->select('kdBus', 'namaBus')
+        ->where('kdBus', '=', $kd)
+        ->get();
+    return $result[0]->namaBus;
+}
+
+
 function hargaongkir($tujuan)
 {
 

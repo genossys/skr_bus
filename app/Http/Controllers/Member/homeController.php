@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Member;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Master\busModel;
 use App\Master\jadwalModel;
 use App\Master\terminalModel;
+use App\Transaksi\pesanModel;
+use Carbon\Carbon;
 
 class homeController extends Controller
 {
@@ -32,5 +35,43 @@ class homeController extends Controller
             ->where('tujuan', '=', $tujuan)
             ->get();
         return view('umum.jadwal')->with(['asal' => $asal, 'tujuan' => $tujuan, 'jadwal' => $jadwal, 'tanggal' => $tanggal]);
+    }
+
+    public function prebooking(Request $r)
+    {
+        $asal = $r->asal;
+        $tujuan = $r->tujuan;
+        $tanggal = $r->tanggal;
+        $idJadwal = $r->idJadwal;
+        $kdBus = $r->kdBus;
+        $bus = busModel::query()
+            ->select('kdBus', 'namaBus', 'kursi')
+            ->get();
+        return view('umum.prebooking')->with([
+            'asal' => $asal,
+            'tujuan' => $tujuan,
+            'tanggal' => $tanggal,
+            'idJadwal' => $idJadwal,
+            'kdBus' => $kdBus,
+            'bus' => $bus
+        ]);
+    }
+
+    public function pesan(Request $r)
+    {
+
+        try {
+            $pesan = new pesanModel();
+            $pesan->noTrans = NULL;
+            $pesan->tanggal = Carbon::now('Y-m-d');
+            $pesan->username = $r->username;
+            $pesan->idJadwal = $r->idJadwal;
+            $pesan->kursi = $r->kursi;
+            $pesan->namaPenumpang = $r->penumpang;
+            $pesan->harga = $r->harga;
+            $pesan->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }

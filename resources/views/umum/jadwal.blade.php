@@ -33,6 +33,7 @@ $sekarang = date("Y-m-d");
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>Nama Bus</th>
                     <th>Jam</th>
                     <th>Keberangkatan</th>
                     <th>Tujuan</th>
@@ -46,12 +47,13 @@ $sekarang = date("Y-m-d");
                     @foreach ($jadwal as $item)
                         <tr>
                             <td>{{$loop->iteration}}</td>
+                            <td>{{getNamaBus($item->kdBus)}}</td>
                             <td>{{$item->jam}}</td>
                             <td>{{getNamaTerminal($asal)}}</td>
                             <td>{{getNamaTerminal($tujuan)}}</td>
-                            <td>{{$item->harga}}</td>
+                            <td>{{formatuang($item->harga)}}</td>
                             <td style="width: 170px">
-                                <a href="/prebooking" class="btn btn-outline-success">Beli Sekarang</a>
+                            <a href="/prebooking?asal={{$asal}}&tujuan={{$tujuan}}&idJadwal={{$item->idJadwal}}&tanggal={{$tanggal}}&kdBus={{$item->kdBus}}" class="btn btn-outline-success">Beli Sekarang</a>
                             </td>
                         </tr>
                     @endforeach
