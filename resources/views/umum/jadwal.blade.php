@@ -51,7 +51,7 @@ $sekarang = date("Y-m-d");
                             <td>{{getNamaTerminal($tujuan)}}</td>
                             <td>{{$item->harga}}</td>
                             <td style="width: 170px">
-                                <button class="btn btn-outline-success">Beli Sekarang</button>
+                                <a href="/prebooking" class="btn btn-outline-success">Beli Sekarang</a>
                             </td>
                         </tr>
                     @endforeach
