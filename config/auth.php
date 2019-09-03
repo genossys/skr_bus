@@ -46,6 +46,17 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'member' => [
+            'driver' => 'session',
+            'provider' => 'members',
+        ],
+
+        'member-api' => [
+            'driver' => 'token',
+            'provider' => 'members',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -71,6 +82,10 @@ return [
             'model' => App\User::class,
         ],
 
+        'members' => [
+            'driver' => 'eloquent',
+            'model' => App\Master\memberModel::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -95,6 +110,11 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'members' => [
+            'provider' => 'members',
             'table' => 'password_resets',
             'expire' => 60,
         ],

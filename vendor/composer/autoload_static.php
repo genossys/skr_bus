@@ -82,6 +82,7 @@ class ComposerStaticInit7082af5bbbfb3c43ae3e40ef09d16ca5
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '0d8253363903f0ac7b0978dcde4e28a0' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/helpers.php',
         'a806c12c6e24e7e4e900847766218dba' => __DIR__ . '/..' . '/uxweb/sweet-alert/src/SweetAlert/functions.php',
+        '48c267551274a550f0dff35308f70a47' => __DIR__ . '/../..' . '/app/helper/genoshelper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -525,6 +526,7 @@ class ComposerStaticInit7082af5bbbfb3c43ae3e40ef09d16ca5
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',
@@ -533,6 +535,14 @@ class ComposerStaticInit7082af5bbbfb3c43ae3e40ef09d16ca5
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Http\\Middleware\\cekRole' => __DIR__ . '/../..' . '/app/Http/Middleware/cekRole.php',
+        'App\\Http\\Middleware\\memberonly' => __DIR__ . '/../..' . '/app/Http/Middleware/memberonly.php',
+        'App\\Master\\kategoriModel' => __DIR__ . '/../..' . '/app/Master/kategoriModel.php',
+        'App\\Master\\memberModel' => __DIR__ . '/../..' . '/app/Master/memberModel.php',
+        'App\\Master\\ongkirModel' => __DIR__ . '/../..' . '/app/Master/ongkirModel.php',
+        'App\\Master\\productModel' => __DIR__ . '/../..' . '/app/Master/productModel.php',
+        'App\\Master\\satuanModel' => __DIR__ . '/../..' . '/app/Master/satuanModel.php',
+        'App\\Master\\testimoniModel' => __DIR__ . '/../..' . '/app/Master/testimoniModel.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',

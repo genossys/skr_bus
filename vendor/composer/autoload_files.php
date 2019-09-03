@@ -81,4 +81,5 @@ return array(
     '801c31d8ed748cfa537fa45402288c95' => $vendorDir . '/psy/psysh/src/functions.php',
     '0d8253363903f0ac7b0978dcde4e28a0' => $vendorDir . '/beyondcode/laravel-dump-server/helpers.php',
     'a806c12c6e24e7e4e900847766218dba' => $vendorDir . '/uxweb/sweet-alert/src/SweetAlert/functions.php',
+    '48c267551274a550f0dff35308f70a47' => $baseDir . '/app/helper/genoshelper.php',
 );
