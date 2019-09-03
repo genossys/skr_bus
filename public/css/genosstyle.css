@@ -20,11 +20,20 @@
 
 html,
 body {
-    font-family: 'source-sans-pro';
+    font-family: "Roboto", sans-serif;
     padding: 0;
     margin: 0;
 }
 
+.slide1 {
+    background-image: url("../images/slide1.jpg");
+    background-size: cover;
+}
+
+.slide2 {
+    background-image: url("../images/slide2.jpg");
+    background-size: cover;
+}
 
 .breadcrumb {
     font-size: 12px;
@@ -140,7 +149,6 @@ li a i {
     margin-top: 10px;
     margin-bottom: 10px;
 }
-
 /* Kartu produk */
 
 
@@ -181,4 +189,11 @@ li a i {
 
 .rekening {
     background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* FOOTER */
+.footerLestari {
+    line-height: 1.5;
+    min-height: 200px;
+    background-color: #03298F;
 }

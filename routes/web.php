@@ -12,7 +12,23 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('umum.welcome');
+});
+
+Route::get('/jadwal', function () {
+    return view('umum.jadwal');
+});
+
+Route::get('/pembayaran', function () {
+    return view('umum.pembayaran');
+});
+
+Route::get('/cekpesanan', function () {
+    return view('umum.cekpesanan');
+});
+
+Route::get('/prebooking', function () {
+    return view('umum.prebooking');
 });
 
 Auth::routes();
