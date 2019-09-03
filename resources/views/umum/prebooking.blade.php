@@ -10,9 +10,9 @@ $sekarang = date("Y-m-d");
     <p style="padding-top: 13px; color: white; font-size: 20px; margin-left: 100px">Solo - Jogja, Selasa 2 September 2019</p>
 </div>
 
-<div class="container">
+<section class="container">
     <div class="row mt-3">
-        <div class="card col-sm-3 pt-3 pl-5">
+        <div class="col-sm-3 pt-3 pl-5 rounded" style="background-color: white; border: 1px solid #ddd">
             <h5>Kursi yang tersedia:</h5>
             <div class="pl-2 pt-3 pr-5 pb-3">
                 <div class="row">
@@ -21,16 +21,103 @@ $sekarang = date("Y-m-d");
                         <button class="rounded bg-danger h-100 w-100 text-white">{{$i}}</button>
                         @else
                         <button class="rounded bg-success h-100 w-100 text-white">{{$i}}</button>
-                        @endif
-                </div>
+                        @endif </div>
                 @endfor
-
             </div>
         </div>
     </div>
-</div>
-</div>
-<div style="height: 500px"></div>
+
+    <div class="col-sm-9 pl-4">
+        <div class="row">
+            <div class="col-12 rounded pt-3" style="background-color: white; border: 1px solid #ddd">
+
+                <h5>Data Penumpang:</h5>
+                <p>Isi data penumpang dan kursi secara valid</p>
+                <form action="" method="post">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Nama Penumpang</label>
+                                <input type="text" class="form-control" placeholder="Nama Produk" id="txtIdProduk" name="txtIdProduk">
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Kursi</label>
+                                <select class="form-control" id="" name="">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label><br></label>
+                                <button class="form-control btn btn-outline-success"> <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Tambah</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12 rounded mt-2 pt-3" style="background-color: white; border: 1px solid #ddd">
+                <h5>Data Penumpang</h5>
+                <p>Data penumpang yang sudah di masukan</p>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama Penumpang</th>
+                                <th>Kursi</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Pradana Mahendra</td>
+                                <td>1</td>
+                                <td>
+                                    <button class="btn btn-outline-info"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp; Hapus</button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Bagus Yanuar</td>
+                                <td>2</td>
+                                <td>
+                                    <button class="btn btn-outline-info"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp; Hapus</button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-100 rounded mt-2 pt-3 pl-5 pb-2 mb-3" style="background-color: white; border: 1px solid #ddd">
+        <div class="row">
+            <div class="col-8">
+                <h5>Total Biaya</h5>
+                <p>biaya tiket Rp 230.000 x 4</p>
+                <h5 class="text-primary">Rp 460.000</h5>
+            </div>
+
+            <div class="col-4 pr-5">
+                <button class="brn btn-primary btn-lg pull-right">Lanjut Ke Pembayaran</button>
+            </div>
+        </div>
+    </div>
+</section>
+
 @endsection
 
 @section('css')
