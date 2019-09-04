@@ -40,33 +40,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Bus AC Ekonomi</td>
-                                        <td>Terminal 1 (SOLO)</td>
-                                        <td>Terminal 1 (SURABAYA)</td>
-                                        <td>14:00</td>
-                                        <td>160.000</td>
-                                        <td>
-                                            <a href="#" class="btn-sm btn-warning"><i class="fa fa-edit"></i></a>
-                                            <a href="#" class="btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Bus AC NON Ekonomi</td>
-                                        <td>Terminal 1 (JAKARTA)</td>
-                                        <td>Terminal 1 (SURABAYA)</td>
-                                        <td>14:00</td>
-                                        <td>250.000</td>
-                                        <td>
-                                            <a href="#" class="btn-sm btn-warning"><i class="fa fa-edit"></i></a>
-                                            <a href="#" class="btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    
-                                </tbody>
+                                
                             </table>
                         </div>
                     </div>
@@ -96,6 +70,18 @@ $(document).ready(function () {
     table = $('#tb-jadwal').DataTable({
         lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "All"]],
         autowidth: true,
+        serverSide: true,
+        processing: false,
+        ajax: '/admin/jadwal/view',
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false},
+            { data: 'namaBus', name: 'namaBus' },
+            { data: 'asal', name: 'asal' },
+            { data: 'tujuan', name: 'tujuan' },
+            { data: 'jam', name: 'jam' },
+            { data: 'harga', name: 'harga' },
+            { data: 'action', name: 'action', searchable: false, orderable: false }
+        ],
         columnDefs: [
             { targets: [0], width:'5%', orderable: false},
             { targets: [1], width:'10%'},

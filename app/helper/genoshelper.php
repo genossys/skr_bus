@@ -2,6 +2,8 @@
 
 use App\Master\busModel;
 use App\Master\terminalModel;
+use App\Transaksi\pesanModel;
+use Illuminate\Support\Facades\DB;
 
 function formatRupiah($angka)
 {
@@ -49,6 +51,26 @@ function getNamaBus($kd)
     return $result[0]->namaBus;
 }
 
+function getStatusKursi($jadwal, $tanggal, $nokursi)
+{
+    $status = pesanModel::query()
+        ->select('noTrans', 'tanggal', 'idJadwal', 'kursi')
+        ->where('tanggal', '=', $tanggal)
+        ->where('idJadwal', '=', $jadwal)
+        ->where('kursi', '=', $nokursi)
+        ->get();
+    if ($status->count() > 0) {
+        return 'isi';
+    }
+
+    return 'kosong';
+    // $status = busModel::query()
+    //     ->select('kdBus')
+    //     ->selectRaw('getStatusKursi(\'KD01\',\'2019-09-03\',\'' . $nokursi . '\') as status')
+    //     ->get();
+    // return $status[0]->status;
+    // return $status;
+}
 
 function hargaongkir($tujuan)
 {

@@ -6,22 +6,23 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Transaksi\belanjaModel;
 use App\Transaksi\KeranjangModel;
+use App\Transaksi\pesanModel;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use PDF;
 
-class LaporanPenjualanController extends Controller
+class LaporanPemesananController extends Controller
 {
     //
     public function index()
     {
-        return view('admin.laporan.penjualan.page');
+        return view('admin.laporan.pemesanan.page');
     }
 
     public function search(Request $r)
     {
-        $sBynotrans = [['tb_belanja.noTrans', 'LIKE', '%' . $r->index . '%']];
-        $sByusername = [['username', 'LIKE', '%' . $r->index . '%']];
+        $sBynotrans = [['tb_pemesanan.noTrans', 'LIKE', '%' . $r->index . '%']];
+        $sByusername = [['tb_cartpesan.username', 'LIKE', '%' . $r->index . '%']];
         $tgl1 = $r->tgl1;
         $tgl2 = $r->tgl2;
         if ($r->tgl1 == '') {
@@ -32,33 +33,50 @@ class LaporanPenjualanController extends Controller
             $tgl2 = Carbon::now()->format('Y-m-d');
         }
 
-        $penjualan = belanjaModel::query()
-            ->join('tb_pembayaran', 'tb_belanja.noTrans', '=', 'tb_pembayaran.noTrans')
-            ->select('tb_belanja.noTrans', 'username', 'tb_belanja.tanggal', 'subTotal', 'ongkir', 'confirmed', 'tb_belanja.status', 'tb_pembayaran.bank')
-            ->selectRaw('(subTotal + ongkir) as total')
-            ->where('confirmed', '=', '1')
-            ->where('tb_belanja.status', '=', 'Terima')
-            ->whereBetween('tb_belanja.tanggal', [$tgl1, $tgl2])
+        $pesan = pesanModel::query()
+            ->join('tb_pemesanan', 'tb_pemesanan.noTrans', '=', 'tb_cartpesan.noTrans')
+            ->join('tb_pembayaran', 'tb_cartpesan.noTrans', '=', 'tb_pembayaran.noTrans')
+            ->join('tb_jadwal', 'tb_jadwal.idJadwal', '=', 'tb_cartpesan.idJadwal')
+            ->join('tb_member', 'tb_member.username', '=', 'tb_cartpesan.username')
+            ->select(
+                'tb_pemesanan.noTrans',
+                'tb_pemesanan.tanggal',
+                'tb_cartpesan.username',
+                'tb_cartpesan.idJadwal',
+                'tb_jadwal.asal',
+                'tb_jadwal.tujuan',
+                'kursi',
+                'namaPenumpang',
+                'tb_cartpesan.harga',
+                'tb_member.nohp',
+                'tb_member.alamat',
+                'tb_pemesanan.total',
+                'tb_pembayaran.status',
+                'tb_pembayaran.urlFoto'
+            )
+            ->where('tb_pemesanan.confirmed', '=', '1')
+            ->whereBetween('tb_pemesanan.tanggal', [$tgl1, $tgl2])
             ->where(function ($query) use ($sByusername, $sBynotrans) {
                 $query->where($sByusername)
                     ->orWhere($sBynotrans);
             })
             ->get();
-        return DataTables::of($penjualan)
+        return DataTables::of($pesan)
             ->addIndexColumn()
-            ->addColumn('detail', function ($pembayaran) {
-                return '<a class="btn-sm btn-success" id="btn-detail" href="/admin/laporan/penjualan/detail?noTrans=' . $pembayaran->noTrans . '" target="_blank">Lihat Detail</a>';
+            ->addColumn('detail', function ($pesan) {
+                return '<a class="btn-sm btn-success" id="btn-detail" href="/admin/laporan/penjualan/detail?noTrans=' . $pesan->noTrans . '" target="_blank">Lihat Detail</a>';
             })
-            ->addColumn('total', function ($penjualan) {
-                return formatuang($penjualan->total);
+            ->editColumn('asal', function ($pesan) {
+                return getNamaTerminal($pesan->asal);
             })
-            ->addColumn('subTotal', function ($penjualan) {
-                return formatuang($penjualan->subTotal);
+            ->editColumn('tujuan', function ($pesan) {
+                return getNamaTerminal($pesan->asal);
             })
-            ->addColumn('ongkir', function ($penjualan) {
-                return formatuang($penjualan->ongkir);
+            ->editColumn('total', function ($pesan) {
+                return formatuang($pesan->total);
             })
-            ->rawColumns(['total', 'subTotal', 'ongkir', 'detail'])
+
+            ->rawColumns(['detail'])
             ->make(true);
     }
 

@@ -32,8 +32,25 @@ class jadwalController extends Controller
 
     public function store(Request $r)
     {
-        $jadwal = jadwalModel::where('id', '=', $r->id)->firstOrFail();
-        return view('admin.master.jadwal.update')->with(['jadwal' => $jadwal]);
+        $terminal = terminalModel::query()
+            ->join('tb_kota', 'tb_kota.kdKota', '=', 'tb_terminal.kdKota')
+            ->select('kdTerminal', 'namaTerminal', 'tb_kota.namaKota')
+            ->get();
+
+        $jadwal = jadwalModel::query()
+            ->join('tb_bus', 'tb_bus.kdBus', '=', 'tb_jadwal.kdBus')
+            ->select(
+                'idJadwal',
+                'tb_jadwal.kdBus',
+                'asal',
+                'tujuan',
+                'jam',
+                'harga',
+                'tb_bus.namaBus'
+            )
+            ->where('idJadwal', '=', $r->id)
+            ->firstOrFail();
+        return view('admin.master.jadwal.update')->with(['jadwal' => $jadwal, 'terminal' => $terminal]);
     }
 
     public function getData()
@@ -49,6 +66,7 @@ class jadwalController extends Controller
                 'harga',
                 'tb_bus.namaBus'
             )
+            ->orderBy('idJadwal', 'ASC')
             ->get();
 
         return DataTables::of($jadwal)
@@ -57,6 +75,15 @@ class jadwalController extends Controller
                 return '<a class="btn-sm btn-warning" id="btn-edit" href="/admin/jadwal/store?id=' . $jadwal->idJadwal . '"><i class="fa fa-edit"></i></a>
                  <a class="btn-sm btn-danger" data-toggle="tooltip" title="Hapus Data" id="btn-delete" href="#" onclick="hapus(\'' . $jadwal->idJadwal . '\',event)"><i class="fa fa-trash"></i></a>
                  ';
+            })
+            ->editColumn('asal', function ($jadwal) {
+                return getNamaTerminal($jadwal->asal);
+            })
+            ->editColumn('tujuan', function ($jadwal) {
+                return getNamaTerminal($jadwal->tujuan);
+            })
+            ->editColumn('harga', function ($jadwal) {
+                return formatuang($jadwal->harga);
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -68,11 +95,11 @@ class jadwalController extends Controller
         $messages = [];
 
         $rules = [
-            'username' => 'required|max:191|unique:tb_member,username',
-            'email' => 'required|max:191',
-            'alamat' => 'required|max:191',
-            'nohp' => 'required|numeric|digits_between:1,15',
-            'password' => 'required|string|min:6|confirmed',
+            'kdBus' => 'required|max:191',
+            'asal' => 'required|max:191',
+            'tujuan' => 'required',
+            'jam' => 'required',
+            'harga' => 'required',
         ];
 
         return Validator::make($r->all(), $rules, $messages);
@@ -86,21 +113,31 @@ class jadwalController extends Controller
             return redirect()->back()->withErrors($errors)->withInput();
         } else {
 
-            try {
-                $member = new memberModel();
-                $member->username = $r->username;
-                $member->email = $r->email;
-                $member->password = Hash::make($r->password);
-                $member->nohp = $r->nohp;
-                $member->alamat = $r->alamat;
-                $member->save();
-                Alert::success('Success', 'Berhasil Menambahkan Data');
-                return redirect()->back();
-            } catch (\Exception  $e) {
-                $exData = explode('(', $e->getMessage());
-                Alert::error('Gagal Menambahkan Data \n' . $exData[0], 'Ooops');
-                return redirect()->back()->withInput();
+            $cek = jadwalModel::where('kdBus', '=', $r->kdBus)
+                ->where('asal', '=', $r->asal)
+                ->where('tujuan', '=', $r->tujuan)
+                ->where('jam', '=', $r->jam)
+                ->first();
+
+            if ($cek == NULL) {
+                try {
+                    $jadwal = new jadwalModel();
+                    $jadwal->kdBus = $r->kdBus;
+                    $jadwal->asal = $r->asal;
+                    $jadwal->tujuan = $r->tujuan;
+                    $jadwal->jam = $r->jam;
+                    $jadwal->harga = $r->harga;
+                    $jadwal->save();
+                    Alert::success('Success', 'Berhasil Menambahkan Data');
+                    return redirect()->back();
+                } catch (\Exception  $e) {
+                    $exData = explode('(', $e->getMessage());
+                    Alert::error('Gagal Menambahkan Data \n' . $exData[0], 'Ooops');
+                    return redirect()->back()->withInput();
+                }
             }
+            Alert::error('Jadwal Sudah Tersedia\nPeriksa Kembali Jadwal', 'Ooops');
+            return redirect()->back()->withInput();
         }
     }
 
@@ -109,15 +146,12 @@ class jadwalController extends Controller
         $messages = [];
 
         $rules = [
-            'username' => 'required|max:191|unique:tb_member,username,' . $r->username . ',username',
-            'email' => 'required|max:191',
-            'alamat' => 'required|max:191',
-            'nohp' => 'required|numeric|digits_between:1,15',
+            'kdBus' => 'required|max:191',
+            'asal' => 'required|max:191',
+            'tujuan' => 'required',
+            'jam' => 'required',
+            'harga' => 'required',
         ];
-
-        if ($r->password != null) {
-            $rules = array_add($rules, 'password', 'string|min:6|confirmed');
-        }
 
         return Validator::make($r->all(), $rules, $messages);
     }
@@ -132,21 +166,27 @@ class jadwalController extends Controller
             try {
                 $id = $r->oldusername;
                 $data = [
-                    'username' => $r->username,
-                    'email' => $r->email,
-                    'nohp' => $r->nohp,
-                    'alamat' => $r->alamat,
+                    'kdBus' => $r->kdBus,
+                    'asal' => $r->asal,
+                    'tujuan' => $r->tujuan,
+                    'jam' => $r->jam,
+                    'harga' => $r->harga,
                 ];
 
-                if ($r->password != null) {
-                    $data = array_add($data, 'password', Hash::make($r->password));
+                $cek = jadwalModel::where('kdBus', '=', $r->kdBus)
+                    ->where('asal', '=', $r->asal)
+                    ->where('tujuan', '=', $r->tujuan)
+                    ->where('jam', '=', $r->jam)
+                    ->first();
+                if ($cek == NULL) {
+                    jadwalModel::query()
+                        ->where('idJadwal', '=', $id)
+                        ->update($data);
+                    Alert::success('Success', 'Berhasil Merubah Data');
+                    return redirect('/admin/jadwal');
                 }
-
-                memberModel::query()
-                    ->where('username', '=', $id)
-                    ->update($data);
-                Alert::success('Success', 'Berhasil Merubah Data');
-                return redirect('/admin/member');
+                Alert::error('Jadwal Sudah Tersedia\nPeriksa Kembali Jadwal', 'Ooops');
+                return redirect()->back()->withInput();
             } catch (\Exception  $e) {
                 $exData = explode('(', $e->getMessage());
                 Alert::error('Gagal Merubah Data \n' . $exData[0], 'Ooops');
@@ -159,8 +199,8 @@ class jadwalController extends Controller
     {
         $id = $r->input('id');
         try {
-            memberModel::query()
-                ->where('id', '=', $id)
+            jadwalModel::query()
+                ->where('idJadwal', '=', $id)
                 ->delete();
             return response()->json([
                 'sukses' => 'Berhasil Di hapus' . $id,

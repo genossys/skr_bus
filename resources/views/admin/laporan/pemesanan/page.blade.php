@@ -1,7 +1,7 @@
 @extends('admin.master')
 
 @section('judul')
-Laporan Penjualan
+Laporan Pemesanan
 @endsection
 
 @section('content')
@@ -11,7 +11,7 @@ Laporan Penjualan
                 <div class="text-right">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/admin"><i class="fa fa-tachometer" aria-hidden="true"></i>&nbsp;Dashboard</a></li>
-                        <li class="breadcrumb-item active">Laporan Penjualan</li>
+                        <li class="breadcrumb-item active">Laporan Pemesanan</li>
                     </ol>
                 </div>
 
@@ -20,7 +20,7 @@ Laporan Penjualan
                         <div class="card-title">
                             <div class="row">
                                 <div class="col-md-6">Filter</div>
-                                <div class="col-md-6 text-right">Laporan Penjualan</div>
+                                <div class="col-md-6 text-right">Laporan Pemesanan</div>
                             </div>
                         </div>
                         <hr>
@@ -60,9 +60,8 @@ Laporan Penjualan
                                         <th>No. Transaksi</th>
                                         <th>Tanggal</th>
                                         <th>Username</th>
-                                        <th>Bank</th>
-                                        <th>Sub Total (Rp.)</th>
-                                        <th>Ongkir (Rp.)</th>
+                                        <th>Asal</th>
+                                        <th>Tujuan</th>
                                         <th>Total (Rp.)</th>
                                         <th>Detail</th>
                                     </tr>
@@ -108,7 +107,7 @@ $(document).ready(function () {
         processing: false,
         ajax: {
             type : 'GET',
-            url : '/admin/laporan/penjualan/view',
+            url : '/admin/laporanpemesananview',
             'data' : function(d){
                 return $.extend(
                     {},
@@ -126,9 +125,8 @@ $(document).ready(function () {
             { data: 'noTrans', name: 'noTrans' },
             { data: 'tanggal', name: 'tanggal' },
             { data: 'username', name: 'username' },
-            { data: 'bank', name: 'bank' },
-            { data: 'subTotal', name: 'subTotal' },
-            { data: 'ongkir', name: 'ongkir' },
+            { data: 'asal', name: 'asal' },
+            { data: 'tujuan', name: 'tujuan' },
             { data: 'total', name: 'total' },
             { data: 'detail', name: 'detail', searchable: false, orderable: false }
         ],
@@ -140,10 +138,9 @@ $(document).ready(function () {
             { targets: [4], width:'15%'},
             { targets: [5], width:'10%'},
             { targets: [6], width:'10%'},
-            { targets: [7], width:'10%'},
-            { targets: [8], width:'15%', orderable: false},
+            { targets: [7], width:'15%', orderable: false},
             {
-                targets: [0, 1, 2, 3, 4, 7, 8],
+                targets: [0, 1, 2, 3, 4, 7],
                 className: 'text-center'
             }, 
             {

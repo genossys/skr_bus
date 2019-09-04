@@ -156,33 +156,9 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link ">
+                                    <a href="/admin/laporanpemesanan" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Penjualan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link ">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Penjualan Di Tolak</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link ">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Barang Keluar</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link ">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Data Produk</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link ">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Stok</p>
+                                        <p>Pemesanan</p>
                                     </a>
                                 </li>
                             </ul>

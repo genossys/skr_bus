@@ -34,33 +34,17 @@ Data Pembayaran
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2019-08-04</td>
-                                    <td>111111</td>
-                                    <td>BCA</td>
-                                    <td>
-                                        <a href="#" class="btn btn-success">Detail</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>2019-08-02</td>
-                                    <td>111112</td>
-                                    <td>BRI</td>
-                                    <td>
-                                        <a href="#" class="btn btn-success">Detail</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>2019-08-02</td>
-                                    <td>111113</td>
-                                    <td>BRI</td>
-                                    <td>
-                                        <a href="#" class="btn btn-success">Detail</a>
-                                    </td>
-                                </tr>
+                                @foreach ($pembayaran as $item)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$item->tanggal}}</td>
+                                        <td>{{$item->noTrans}}</td>
+                                        <td>{{$item->bank}}</td>
+                                        <td>
+                                        <a href="/admin/pembayarandetail?noTrans={{$item->noTrans}}" class="btn btn-success">Detail</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

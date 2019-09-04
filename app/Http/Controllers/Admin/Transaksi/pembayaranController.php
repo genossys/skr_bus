@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Transaksi\pembayaranModel;
 use Yajra\DataTables\DataTables;
 use App\Transaksi\KeranjangModel;
+use App\Transaksi\pesanModel;
 use PDF;
+use Alert;
 
 class pembayaranController extends Controller
 {
@@ -15,29 +17,19 @@ class pembayaranController extends Controller
 
     public function index()
     {
-        return view('admin.transaksi.page');
+        $pembayaran = pembayaranModel::query()
+            ->select('id', 'tanggal', 'noTrans', 'bank', 'urlFoto', 'status')
+            ->where('status', '=', 'pending')
+            ->orderBy('tanggal', 'DESC')
+            ->get();
+        return view('admin.transaksi.page')->with(['pembayaran' => $pembayaran]);
     }
     public function pageTransaksi()
     {
         return view('admin.transaksi.pagetransaksi');
     }
 
-    public function getData()
-    {
-        $pembayaran = pembayaranModel::query()
-            ->select('tanggal', 'noTrans', 'bank', 'urlBukti', 'status')
-            ->where('status', '=', 'pending')
-            ->orderBy('tanggal', 'DESC')
-            ->get();
 
-        return DataTables::of($pembayaran)
-            ->addIndexColumn()
-            ->addColumn('detail', function ($pembayaran) {
-                return '<a class="btn-sm btn-success" id="btn-detail" href="/admin/transaksi/detail?noTrans=' . $pembayaran->noTrans . '">Lihat Detail</a>';
-            })
-            ->rawColumns(['detail'])
-            ->make(true);
-    }
     public function getDataTerkonfirmasi()
     {
         $pembayaran = pembayaranModel::query()
@@ -70,34 +62,30 @@ class pembayaranController extends Controller
 
     public function detail(Request $r)
     {
-        $trans = KeranjangModel::query()
-            ->join('tb_belanja', 'tb_keranjang.noTrans', '=', 'tb_belanja.noTrans')
-            ->join('tb_pembayaran', 'tb_keranjang.noTrans', '=', 'tb_pembayaran.noTrans')
-            ->join('tb_product', 'tb_keranjang.kdProduct', '=', 'tb_product.kdProduct')
+        $pesan = pesanModel::query()
+            ->join('tb_pemesanan', 'tb_pemesanan.noTrans', '=', 'tb_cartpesan.noTrans')
+            ->join('tb_pembayaran', 'tb_cartpesan.noTrans', '=', 'tb_pembayaran.noTrans')
+            ->join('tb_jadwal', 'tb_jadwal.idJadwal', '=', 'tb_cartpesan.idJadwal')
+            ->join('tb_member', 'tb_member.username', '=', 'tb_cartpesan.username')
             ->select(
-                'tb_keranjang.noTrans',
-                'tb_keranjang.tanggal',
-                'tb_keranjang.kdProduct',
-                'tb_keranjang.qty',
-                'tb_keranjang.harga',
-                'tb_keranjang.checkout',
-                'tb_belanja.username as username',
-                'tb_product.namaProduct as namaProduct',
-                'tb_belanja.status as statusbayar',
-                'tb_belanja.alamat as alamat',
-                'tb_belanja.ongkir as ongkir',
-                'tb_pembayaran.urlBukti as urlBukti',
-                'tb_pembayaran.status as statuskonfirmasi'
+                'tb_pemesanan.noTrans',
+                'tb_pemesanan.tanggal',
+                'tb_cartpesan.username',
+                'tb_cartpesan.idJadwal',
+                'tb_jadwal.asal',
+                'tb_jadwal.tujuan',
+                'kursi',
+                'namaPenumpang',
+                'tb_cartpesan.harga',
+                'tb_member.nohp',
+                'tb_member.alamat',
+                'tb_pemesanan.total',
+                'tb_pembayaran.status',
+                'tb_pembayaran.urlFoto'
             )
-            ->selectRaw('(tb_keranjang.qty * tb_keranjang.harga) as subtotal')
-            ->where('tb_keranjang.noTrans', '=', $r->noTrans)
+            ->where('tb_cartpesan.noTrans', '=', $r->noTrans)
             ->get();
-        $subtotal = $trans->sum('subtotal');
-        $ongkir = $trans[0]->ongkir;
-        $total = $subtotal + $ongkir;
-        $status = $trans[0]->statuskonfirmasi;
-
-        return view('admin.transaksi.detail')->with(['transaksi' => $trans, 'subtotal' => $subtotal, 'ongkir' => $ongkir, 'total' => $total, 'status' => $status]);
+        return view('admin.transaksi.detail')->with(['pesan' => $pesan]);
     }
 
     public function invoice(Request $r)
@@ -145,15 +133,12 @@ class pembayaranController extends Controller
             pembayaranModel::query()
                 ->where('noTrans', '=', $nota)
                 ->update($data);
-            return response()->json([
-                'sqlResponse' => true,
-            ]);
+            Alert::success('Success', 'Berhasil Melakukan Konfirmasi');
+            return redirect('/admin/pembayaran');
         } catch (\Exception $e) {
             $exData = explode('(', $e->getMessage());
-            return response()->json([
-                'msg' =>  $exData[0],
-                'sqlResponse' => false,
-            ]);
+            Alert::error('Gagal Menambahkan Data \n' . $exData[0], 'Ooops');
+            return redirect()->back()->withInput();
         }
     }
 }

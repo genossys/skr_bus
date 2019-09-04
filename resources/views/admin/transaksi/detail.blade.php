@@ -31,30 +31,30 @@ Detail Pembayaran
                             <div class="col-md-3"><h2 class="card-title">Pemesanan Tiket Bus</h2></div>
                             <div class="col-md-9 text-right">
                                 <h5 class="card-title">
-                                    Status Konfrimasi : Menunggu
+                                    Status Konfrimasi : {{$pesan[0]->status}}
                                 </h5>
                             </div>
                             
                         </div>
                         <div class="row">
                                 <div class="col-md-2">No. Transaksi</div>
-                                <div class="col-md-9">: 111111</div>
+                                <div class="col-md-9">: {{$pesan[0]->noTrans}}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">Atas Nama</div>
-                                <div class="col-md-9">: Novi</div>
+                                <div class="col-md-9">: {{$pesan[0]->username}}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">Alamat</div>
-                                <div class="col-md-9">: Jl. Nguter No. 9</div>
+                                <div class="col-md-9">: {{$pesan[0]->alamat}}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">Keberangkatan</div>
-                                <div class="col-md-9">: Terminal 1 (SOLO)</div>
+                                <div class="col-md-9">: {{getNamaTerminal($pesan[0]->asal)}}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">Tujuan</div>
-                                <div class="col-md-9">: Terminal 1 (SURABAYA)</div>
+                                <div class="col-md-9">: {{getNamaTerminal($pesan[0]->tujuan)}}</div>
                             </div>
                     </div>
                     <div class="card-body">
@@ -70,31 +70,35 @@ Detail Pembayaran
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Joni</td>
-                                        <td>4</td>
-                                        <td>160.000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Nur</td>
-                                        <td>3</td>
-                                        <td>160.000</td>
-                                    </tr>
+                                    @foreach ($pesan as $item)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->namaPenumpang}}</td>
+                                            <td>{{$item->kursi}}</td>
+                                            <td>{{$item->harga}}</td>
+                                        </tr>
+                                    @endforeach
+                                    
+                                    
                                 </tbody>
                             </table>
                         </div>
                         <div class="row" style="font-weight: bolder;">
                             <div class="col-md-10 text-right">Total :</div>
-                            <div class="col-md-2 text-right" style="padding-right: 30px;"> Rp. 320.000</div>
+                            <div class="col-md-2 text-right" style="padding-right: 30px;"> Rp. {{$pesan[0]->total}}</div>
                         </div>
                     </div>
                     <div class="card-footer">
                         <div class="text-right">
-                                <a href="#" target="_blank" id="btnCetak" class="btn btn-primary" style="display: inline-block"><i id="iconbtn" class="fa  fa-print" aria-hidden="true"></i>&nbsp;Cetak Invoice</a>
+                                <a href="#" target="_blank" id="btnCetak" class="btn btn-primary" style="display: inline"><i id="iconbtn" class="fa  fa-print" aria-hidden="true"></i>&nbsp;Cetak Invoice</a>
                                 @if ('Pending' == 'Pending')
-                                    <a href="#" id="btnSimpan" class="btn btn-success" onclick="konfirmasi('', 'Terima')"><i id="iconbtn" class="fa  fa-check-circle" aria-hidden="true"></i>&nbsp;Terima</a>
+                                <form method="post" action="/admin/confirmpembayaran">
+                                    @csrf
+                                    <input type="hidden" name="nota" value="{{$pesan[0]->noTrans}}">
+                                    <input type="hidden" name="status" value="Terima">
+                                    <input type="hidden" name="alasan" value="Terima">
+                                    <button type="submit" id="btnSimpan" class="btn btn-success"><i id="iconbtn" class="fa  fa-check-circle" aria-hidden="true"></i>&nbsp;Terima</button>
+                                </form>
                                     <a href="#" class="btn btn-danger" onclick="toggleshow()"><i id="iconbtn" class="fa  fa-times-circle" aria-hidden="true"></i>&nbsp;Tolak</a>
                                 @endif
                                 
@@ -104,6 +108,10 @@ Detail Pembayaran
 
                 <div class="card card-outline card-info" id="alasan" style="display: none;">
                     <div class="card-body">
+                        <form method="post" action="/admin/confirmpembayaran">
+                            @csrf
+                            <input type="hidden" name="nota" value="{{$pesan[0]->noTrans}}">
+                            <input type="hidden" name="status" value="Tolak">
                         <div class="form-group">
                             <label for="my-textarea">Alasan Penolakan</label>
                             <textarea id="alasan" class="form-control" name="alasan" rows="3"></textarea>
@@ -111,7 +119,8 @@ Detail Pembayaran
                     </div>
                     <div class="card-footer">
                         <div class="text-right">
-                            <a href="#" id="btnSimpan" class="btn btn-success" onclick="konfirmasi('', 'Tolak')"><i id="iconbtn" class="fa  fa-check-circle" aria-hidden="true"></i>&nbsp;Submit</a>
+                            <button type="submit" id="btnSimpan" class="btn btn-success"><i id="iconbtn" class="fa  fa-check-circle" aria-hidden="true"></i>&nbsp;Submit</button>
+                            </form>
                             <a href="#" id="btnSimpan" class="btn btn-danger" onclick="toggleshow()"><i id="iconbtn" class="fa  fa-times-circle" aria-hidden="true"></i>&nbsp;Batal</a>
                         </div>
                     </div>
@@ -125,7 +134,7 @@ Detail Pembayaran
                         <div class="card-body">
                             <div class="row">
                                 <div id="foto" class="col-md-10 text-center">
-                                        <img src="" height="500" width="500">
+                                        <img src="{{asset ('/bukti/'.$pesan[0]->urlFoto)}}" height="500" width="500">
                                     </div>
                             </div>
                         </div>

@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{csrf_token()}}">
 
     <title>Laju Prima</title>
 
@@ -16,6 +18,7 @@
     <link href="{{ asset('/css/genosstyle.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/slick/slick.css') }}" />
     <link rel="stylesheet" href="{{asset ('adminlte/plugins/font-awesome/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('/css/sweetalert/sweetalert2.min.css')}}">
 
 
     @yield('css')
@@ -37,12 +40,19 @@
                     <a class="nav-link" href="/">Beranda <span class="sr-only">(current)</span></a>
                 </li>
 
-                <li class="nav-item ">
-                    <a class="nav-link ml-3" href="/cekpesanan">Cek Pesanan</a>
-                </li>
+                @if (auth()->guard('member')->check())
+                    <li class="nav-item ">
+                        <a class="nav-link ml-3" href="/cekpesanan?username={{auth()->guard('member')->user()->username}}">Cek Pesanan</a>
+                    </li>
+                @else
+                    <li class="nav-item ">
+                        <a class="nav-link ml-3" href="/cekpesanan?username=">Cek Pesanan</a>
+                    </li>
+                @endif
+                
 
                 <li class="nav-item ">
-                    <a class="nav-link ml-3" href="/pembayaran">Konfirmasi Pembayaran</a>
+                    <a class="nav-link ml-3" href="/daftarpesanan">Konfirmasi Pembayaran</a>
                 </li>
 
                 @if (auth()->guard('member')->check())
@@ -127,7 +137,8 @@
     <script type="text/javascript" src="{{ asset('/js/app.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/js/jQuery/jquery-3.4.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/js/slick/slick.min.js') }}"></script>
-    <script src="{{ asset('/js/genosstyle.js') }}"></script>
+    <script src="{{ asset('js/sweetalert/sweetalert.min.js') }}"></script>
+    @include('sweet::alert')
     <script type="text/javascript">
         $(document).ready(function() {
             $('.multiple-items').slick({

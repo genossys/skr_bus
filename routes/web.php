@@ -14,15 +14,14 @@
 Route::get('/', 'Member\homeController@index');
 
 Route::get('/jadwal', 'Member\homeController@cariJadwal');
-Route::get('/prebooking', 'Member\homeController@prebooking');
-
-Route::get('/pembayaran', function () {
-    return view('umum.pembayaran');
-});
-
-Route::get('/cekpesanan', function () {
-    return view('umum.cekpesanan');
-});
+Route::get('/prebooking', 'Member\Transaksi\pemesananController@prebooking');
+Route::post('/booking', 'Member\Transaksi\pemesananController@pesan');
+Route::delete('/deletebooking/{id}', 'Member\Transaksi\pemesananController@delete');
+Route::post('/cekout', 'Member\Transaksi\pemesananController@cekout');
+Route::get('/daftarpesanan', 'Member\Transaksi\pembayaranController@index');
+Route::get('/konfirmasi', 'Member\Transaksi\pembayaranController@showFormKonfirmasi');
+Route::post('/upload', 'Member\Transaksi\pembayaranController@confirm');
+Route::get('/cekpesanan', 'Member\Transaksi\pembayaranController@cekPesanan');
 
 
 
@@ -108,16 +107,16 @@ Route::group(['middleware' => 'auth:web'], function () {
             Route::delete('/delete', 'Admin\Master\jadwalController@delete');
         });
 
-        Route::get('/pembayaran', function () {
-            return view('admin.transaksi.page');
-        })->name('pagepembayaran');
+        Route::get('/pembayaran', 'Admin\Transaksi\PembayaranController@index')->name('pagepembayaran');
+        Route::get('/pembayarandetail', 'Admin\Transaksi\PembayaranController@detail');
+        Route::post('/confirmpembayaran', 'Admin\Transaksi\PembayaranController@confirm');
+
+        Route::get('/laporanpemesanan', 'Admin\Laporan\LaporanPemesananController@index');
+        Route::get('/laporanpemesananview', 'Admin\Laporan\LaporanPemesananController@search');
         Route::get('/transaksi', function () {
             return view('admin.transaksi.pagetransaksi');
         })->name('pagetransaksi');
         Route::get('/detail', function () {
-            return view('admin.transaksi.detail');
-        })->name('pagedetail');
-        Route::get('/laporanpemesanan', function () {
             return view('admin.transaksi.detail');
         })->name('pagedetail');
     });

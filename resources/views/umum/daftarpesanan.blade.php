@@ -21,18 +21,18 @@ $sekarang = date("Y-m-d");
 <div style="padding-top: 370px"></div>
 <section class="container rounded mb-5" style="min-height: 200px">
     <div class="w-100">
-        <p style="font-size: 20px" class="d-inline-block">Pesanan anda</p>
+        <p style="font-size: 20px" class="d-inline-block">Pesanan yang harus di konfirmasi</p>
     </div>
 
     <div class="table-responsive">
-        <table class="table">
+        <table class="table" id="tb-pemesanan">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>No. Transaksi</th>
                     <th>Tanggal</th>
-                    <th>Total</th>
-                    <th>Status Konfirmasi</th>
+                    <th>username</th>
+                    <th>Harga</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -43,14 +43,13 @@ $sekarang = date("Y-m-d");
                         <td>{{$loop->iteration}}</td>
                         <td>{{$item->noTrans}}</td>
                         <td>{{$item->tanggal}}</td>
+                        <td>{{$item->username}}</td>
                         <td>{{formatuang($item->total)}}</td>
-                        <td>{{$item->status}}</td>
                         <td style="width: 170px">
-                            <a href="#" class="btn btn-outline-info">Detail</a>
+                        <a href="/konfirmasi?noTrans={{$item->noTrans}}" class="btn btn-outline-info">Konfirmasi</a>
                         </td>
                     </tr>
                 @endforeach
-                
             </tbody>
         </table>
     </div>
@@ -64,6 +63,7 @@ $sekarang = date("Y-m-d");
 
 <!-- datepicker -->
 <link rel="stylesheet" href="{{ asset('/css/bootstrap-datepicker.min.css')}}">
+<link rel="stylesheet" href="{{ asset('/css/datatables/dataTables.bootstrap4.min.css')}}">
 @endsection
 
 @section('script')
@@ -72,6 +72,8 @@ $sekarang = date("Y-m-d");
 
 <!-- datepicker -->
 <script src="{{ asset('/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('js/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
 <script>
     // datepicker
@@ -85,5 +87,32 @@ $sekarang = date("Y-m-d");
 
     // select2
     $('.select2').select2()
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('#tb-pemesanan').DataTable({
+            dom : 'frt',
+            autowidth: true,
+            processing: false,
+            columnDefs: [
+                { targets: [0], width:'5%', orderable: false},
+                { targets: [1], width:'10%'},
+                { targets: [2], width:'10%'},
+                { targets: [3], width:'15%'},
+                { targets: [4], width:'20%'},
+                { targets: [5], width:'20%'},
+                { targets: [6], width:'10%'},
+                { targets: [7], width:'10%'},
+                {
+                    targets: [0,1,2,3,4,5,6,7],
+                    className: 'text-center'
+                },
+            ]
+        });
+    });
 </script>
 @endsection

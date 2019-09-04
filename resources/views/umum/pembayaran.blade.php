@@ -22,8 +22,11 @@ $sekarang = date("Y-m-d");
 <section class="container rounded mb-5" style="min-height: 200px">
     <div class="">
         <div class="container pt-3 pb-3" style="background-color: RGBA(200,200,200,0.4)">
-            <div class="notransaksi">No. Transaksi : </div>
-            <div class="tgltransaksi">Tanggal :</div>
+            <div class="notransaksi">No. Transaksi : {{$noTrans}}</div>
+            <div class="tgltransaksi">Tanggal : {{$pemesanan[0]->tanggal}}</div>
+            <div class="tgltransaksi">Atas Nama : {{$pemesanan[0]->username}}</div>
+            <div class="tgltransaksi">No. Hp : {{$pemesanan[0]->nohp}}</div>
+            <div class="tgltransaksi">Alamat : {{$pemesanan[0]->alamat}}</div>
 
             <div>Detail Pembayaran</div>
 
@@ -37,13 +40,15 @@ $sekarang = date("Y-m-d");
                 <div class="row">
                     <div class="col-sm-9">Total Biaya</div>
                     <div class="col-sm-1 text-right">Rp. </div>
-                    <div class="col-sm-2 text-right">230.000</div>
+                    <div class="col-sm-2 text-right">{{formatuang($pemesanan[0]->total)}}</div>
                 </div>
 
                 <hr>
                 <p style="font-weight: 700"> Upload Bukti Transfer dan Alamat pengiriman:</p>
-                <form method="post" id="formbayar" enctype="multipart/form-data">
-                    <input hidden value="" id="noTrans" name="noTrans">
+                <form method="post" id="formbayar" enctype="multipart/form-data" action="/upload">
+                    @csrf
+                    <input hidden id="noTrans" name="noTrans" value="{{$noTrans}}">
+                    <input hidden id="username" name="username" value="{{auth()->guard('member')->user()->username}}">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -81,7 +86,7 @@ $sekarang = date("Y-m-d");
             <p>Pembayaran akan di cek dalam 24 jam setelah bukti transfer di upload. </p>
             <hr>
             <p style="font-weight: 700"> Cara Pembayaran:</p>
-            <p> 1. Gunakan ATM / iBanking / Setor Tunai untuk transfer ke rekening NAJWA COLLECTION berikut ini</p>
+            <p> 1. Gunakan ATM / iBanking / Setor Tunai untuk transfer ke rekening PO. LAJU PRIMA berikut ini</p>
             <div class="rekening pl-2 pt-1">
                 <p class="mb-0"> Bank: BCA</p>
                 <p class="mb-0"> No Rekening: 73178238</p>
@@ -129,6 +134,7 @@ $sekarang = date("Y-m-d");
 
 <!-- datepicker -->
 <script src="{{ asset('/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('js/tampilan/fileinput.js') }}"></script>
 
 <script>
     // datepicker

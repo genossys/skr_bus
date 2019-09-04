@@ -22,14 +22,13 @@ $sekarang = date("Y-m-d");
 <section class="container rounded mb-5" style="min-height: 200px">
     <div class="w-100">
 
-        <p style="font-size: 20px" class="d-inline-block">Route</p><br>
-        <p style="font-size: 20px" class="d-inline-block">{{getNamaTerminal($asal)}} - {{getNamaTerminal($tujuan)}}</p>
-        <a href="/" class="btn btn-info pull-right">Ubah Pencarian</a>
+        <div style="font-size: 20px; margin-bottom: 5px;">Rute Bus</div>
+        <p style="font-size: 16px" class="d-inline-block">{{getNamaTerminal($asal)}} - {{getNamaTerminal($tujuan)}} , {{$tanggal}}</p>
+        <a href="/" class="btn btn-sm btn-info pull-right">Ganti Jadwal</a>
     </div>
-    <a class="d-inline-block">Jadwal Bus Tanggal : {{$tanggal}}</a>
-
+    <hr>
     <div class="table-responsive">
-        <table class="table">
+        <table class="table" id="tb-jadwal">
             <thead>
                 <tr>
                     <th>#</th>
@@ -42,7 +41,6 @@ $sekarang = date("Y-m-d");
                 </tr>
             </thead>
             <tbody>
-                @if ($jadwal->count() > 0)
                     
                     @foreach ($jadwal as $item)
                         <tr>
@@ -52,20 +50,26 @@ $sekarang = date("Y-m-d");
                             <td>{{getNamaTerminal($asal)}}</td>
                             <td>{{getNamaTerminal($tujuan)}}</td>
                             <td>{{formatuang($item->harga)}}</td>
+                            @if (auth()->guard('member')->check())
+                                <td style="width: 170px">
+                                <a href="/prebooking?idJadwal={{$item->idJadwal}}&tanggal={{$tanggal}}&username={{auth()->guard('member')->user()->username}}" class="btn btn-outline-success">Beli Sekarang</a>
+                                </td>
+                            @else
                             <td style="width: 170px">
-                            <a href="/prebooking?asal={{$asal}}&tujuan={{$tujuan}}&idJadwal={{$item->idJadwal}}&tanggal={{$tanggal}}&kdBus={{$item->kdBus}}" class="btn btn-outline-success">Beli Sekarang</a>
+                                <a href="#" class="btn btn-outline-success" onclick="harusLogin()">Beli Sekarang</a>
                             </td>
+                            <script>
+                                function harusLogin(){
+                                    event.preventDefault();
+                                    alert('harus login dulu');
+                                }
+                            </script>
+                            @endif
+                            
                         </tr>
                     @endforeach
                     
-                @else
-                <tr>
-                    <td colspan="6">
-                        <h4 class="text-center"> Maaf, Jadwal Tidak Tersedia </h4>
-                    </td>
-                </tr>
-                    
-                @endif
+                
             </tbody>
         </table>
     </div>
@@ -74,22 +78,18 @@ $sekarang = date("Y-m-d");
 @endsection
 
 @section('css')
-<!-- Select2 -->
 <link rel="stylesheet" href="{{ asset('/adminlte/plugins/select2/select2.min.css') }}" />
-
-<!-- datepicker -->
 <link rel="stylesheet" href="{{ asset('/css/bootstrap-datepicker.min.css')}}">
+<link rel="stylesheet" href="{{ asset('/css/datatables/dataTables.bootstrap4.min.css')}}">
 @endsection
 
 @section('script')
-<!-- Select2 -->
 <script src="{{asset('/adminlte/plugins/select2/select2.full.min.js')}}"></script>
-
-<!-- datepicker -->
 <script src="{{ asset('/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('js/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
 <script>
-    // datepicker
     $(function() {
         $(".datepicker").datepicker({
             format: 'yyyy-mm-dd',
@@ -98,7 +98,33 @@ $sekarang = date("Y-m-d");
         });
     });
 
-    // select2
     $('.select2').select2()
+
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('#tb-jadwal').DataTable({
+            dom : 'frt',
+            autowidth: true,
+            processing: false,
+            columnDefs: [
+                { targets: [0], width:'5%', orderable: false},
+                { targets: [1], width:'10%'},
+                { targets: [2], width:'15%'},
+                { targets: [3], width:'20%'},
+                { targets: [4], width:'20%'},
+                { targets: [5], width:'15%'},
+                { targets: [6], width:'15%'},
+                {
+                    targets: [0,1,2,3,4,5,6],
+                    className: 'text-center'
+                },
+            ]
+        });
+    });
 </script>
 @endsection
